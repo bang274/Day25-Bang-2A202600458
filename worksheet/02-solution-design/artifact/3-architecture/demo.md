@@ -1,58 +1,42 @@
----
-artifact: 3 — Demo kiến trúc dữ liệu
-format: sơ đồ xử lý + bảng thành phần
----
+# Demo: Kiến trúc Xử lý Tuyển dụng Công bằng
 
-# demo.md — Demo kiến trúc dữ liệu
-
-File này dùng để đặt sơ đồ và mô tả ngắn cách hệ thống giảm rủi ro.
+Dưới đây là sơ đồ luồng dữ liệu (Data Flow) đảm bảo tính minh bạch.
 
 ---
 
-## 1. Sơ đồ cách hệ thống xử lý
+### 1. Sơ đồ luồng (Mermaid Flowchart)
 
-```text
-[Đặt sơ đồ ở đây]
-
-Ví dụ khung:
-
-Người dùng hỏi
-  -> Phân loại câu hỏi
-  -> Có phải câu hỏi rủi ro cao không?
-      -> Không: AI trả lời như bình thường
-      -> Có: Tra nguồn chính thức
-          -> Có dữ liệu: AI trả lời kèm nguồn
-          -> Không có dữ liệu: Chuyển sang người thật
-  -> Ghi lại để theo dõi lỗi
+```mermaid
+graph TD
+    A[CV & JD Input] --> B{Data Sanitizer}
+    B -->|Ẩn thông tin nhạy cảm| C[Agent 1: Skill Scorer]
+    B -->|Trích xuất mốc thời gian| D[Agent 2: Gap Analyzer]
+    
+    C -->|Điểm kỹ năng thuần| E[Fairness Gate]
+    D -->|Lý do & Bối cảnh gap year| E
+    
+    E -->|Nếu Score lệch do Gap Year| F[Cảnh báo: Manual Review Required]
+    E -->|Nếu không có rủi ro| G[Hiển thị kết quả bình thường]
+    
+    F --> H[Recruiter Dashboard với Explainability Tag]
+    G --> H
 ```
 
 ---
 
-## 2. Thành phần chính
+### 2. Mô tả các thành phần
 
-| Thành phần | Nhận gì? | Làm gì? | Trả ra gì? |
-|---|---|---|---|
-| Phân loại câu hỏi | Câu hỏi của người dùng | Xác định có rủi ro cao không | Trả lời thường / cần kiểm tra nguồn |
-| Nguồn chính thức | Chủ đề cần kiểm tra | Tìm dữ liệu mới nhất | Thông tin + nguồn |
-| Bộ xử lý khi thiếu nguồn | Kết quả không có dữ liệu | Không cho AI đoán | Yêu cầu chuyển sang người thật |
-| Ghi lại lỗi | Câu hỏi + kết quả | Lưu lỗi để xem lại | Danh sách lỗi lặp lại |
+#### A. Data Sanitizer
+Lớp này có nhiệm vụ ẩn các thông tin dễ gây định kiến (Năm sinh, Địa chỉ cụ thể, Tên trường) trước khi gửi cho Agent chấm điểm kỹ năng. Điều này buộc Agent 1 phải đánh giá dựa trên "tài năng thực" (Blind audition pattern).
 
----
+#### B. Agent 2: Gap Analyzer
+Agent này chuyên trách việc giải mã các khoảng trống. Thay vì trừ điểm, nó tìm kiếm các hoạt động bù đắp (ví dụ: trong lúc nghỉ thai sản ứng viên vẫn thi chứng chỉ, hoặc sau khi nghỉ ứng viên quay lại làm dự án freelance).
 
-## 3. Khi hệ thống gặp vấn đề
-
-| Khi nào lỗi xảy ra? | Hệ thống làm gì? | Người dùng thấy gì? |
-|---|---|---|
-| Nguồn chính thức không có dữ liệu | | |
-| Nguồn bị lỗi hoặc quá chậm | | |
-| Câu hỏi vượt phạm vi AI | | |
-| Lỗi này lặp lại nhiều lần | | |
+#### C. Fairness Gate (Rule-based)
+Nếu Agent 1 chấm điểm thấp cho một ứng viên mà Agent 2 nhận diện là có gap year thai sản, hệ thống sẽ tự động gán nhãn "Review needed" và yêu cầu con người xác nhận lại trước khi lưu kết quả.
 
 ---
 
-## 4. Kiểm tra nhanh
-
-- [ ] Sơ đồ không chỉ là “AI trả lời tốt hơn”, mà có bước kiểm tra cụ thể.
-- [ ] Có cách xử lý khi thiếu dữ liệu.
-- [ ] Có cách chuyển sang người thật.
-- [ ] Có cách theo dõi để lần sau sửa tốt hơn.
+### 3. Lợi ích kỹ thuật
+- **Tính Module**: Dễ dàng cập nhật luật công bằng mà không cần train lại model.
+- **Audit Trace**: Có thể truy xuất được vì sao một ứng viên bị đánh giá thấp (do kỹ năng hay do hệ thống phát hiện rủi ro).

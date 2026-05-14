@@ -1,46 +1,31 @@
----
-artifact: 1 — Demo giao diện
-format: phác thảo / ảnh / HTML / các màn hình chính
----
+# Demo: Giao diện Sàng lọc Công bằng
 
-# demo.md — Demo giao diện
-
-File này dùng để đặt phần trực quan của giải pháp.
-
-Nếu nhóm có ảnh, bản vẽ hoặc link prototype, đặt link vào đây. Nếu làm bằng Markdown, dùng khung bên dưới.
+Dưới đây là mô phỏng giao diện của danh sách ứng viên trong hệ thống ATS.
 
 ---
 
-## 1. Màn hình chính
+### Danh sách ứng viên - Vị trí Senior Java Developer
 
-```text
-[Đặt phác thảo màn hình ở đây]
-```
-
----
-
-## 2. Trạng thái cần minh họa
-
-| Trạng thái | Người dùng thấy gì? | Người dùng làm gì tiếp? |
-|---|---|---|
-| Có nguồn xác minh | | |
-| Chưa có nguồn xác minh | | |
-| AI không nên tự trả lời | | |
-| Cần chuyển sang người thật | | |
+| Ứng viên | Điểm phù hợp | Trạng thái | Ghi chú từ AI | Hành động |
+|---|---|---|---|---|
+| **Nguyễn Văn A** | **92/100** | 🟢 Tiềm năng | 8 năm kinh nghiệm, Master Java. | [Xem CV] |
+| **Trần Thị B** | **88/100** ⚠️ | 🟡 Cần xem xét | **[Gap Year detected]** 6 năm kinh nghiệm. 1 năm nghỉ thai sản. Kỹ năng Java 17 rất tốt. | [Xem CV gốc] [Phỏng vấn] |
+| **Lê Văn C** | **85/100** | ⚪️ Chờ duyệt | 5 năm kinh nghiệm. | [Xem CV] |
 
 ---
 
-## 3. Ghi chú cho từng thành phần
+### 🔍 Chi tiết Cảnh báo (Tooltip Mockup)
 
-- [Thành phần 1]: [vị trí, nội dung, hành vi]
-- [Thành phần 2]: [vị trí, nội dung, hành vi]
-- [Thành phần 3]: [vị trí, nội dung, hành vi]
+> **⚠️ Lưu ý về tính công bằng:**
+> Ứng viên **Trần Thị B** có một khoảng nghỉ (gap year) từ 2022-2023. 
+> 
+> **AI Insight:** "Tôi đã phân tích năng lực chuyên môn của ứng viên trước và sau khoảng nghỉ này. Kỹ năng của ứng viên vẫn đáp ứng 95% yêu cầu JD. **Đề xuất không trừ điểm vì lý do nghỉ thai sản.**"
+> 
+> [Đọc chính sách tuyển dụng công bằng của công ty]
 
 ---
 
-## 4. Kiểm tra nhanh
-
-- [ ] Nhìn vào demo là hiểu rủi ro đang được chặn ở đâu.
-- [ ] Có trạng thái khi AI không có đủ thông tin.
-- [ ] Có cách chuyển sang người thật.
-- [ ] Câu chữ đủ ngắn để đặt trên màn hình thật.
+### 🎨 Visual Design Notes
+- **Màu sắc**: Sử dụng màu vàng nhạt (⚠️) thay vì màu đỏ để chỉ sự lưu tâm, không phải lỗi.
+- **Vị trí**: Cảnh báo nằm ngay sau điểm số để đập vào mắt người dùng đầu tiên.
+- **Ngôn ngữ**: Sử dụng ngôn ngữ trung tính, khách quan.
